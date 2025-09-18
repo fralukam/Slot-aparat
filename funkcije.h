@@ -3,29 +3,39 @@
 #define FUNKCIJE_H
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 
-#define MAX_IGARA 100
+#define DATA_FILE "igre.bin"
+#define INITIAL_CAPACITY 16
 #define KORISNIK_DUZINA 50
+
+typedef enum { OPC_EXIT = 0, OPC_NEW_GAME = 1, OPC_PRINT = 2, OPC_SORT = 3, OPC_SEARCH = 4, OPC_DELETE = 5, OPC_UPDATE = 6, OPC_COPY_FILE = 7 } menu_option_t;
 
 typedef struct {
     char ime[KORISNIK_DUZINA];
     char simboli[3][3];
-    float dobitak;
+    double dobitak;
 } SlotGame;
 
-extern SlotGame* sveIgre[MAX_IGARA];
-extern int brojIgara;
+extern SlotGame** games_list;
+extern size_t games_count;
+extern size_t games_capacity;
 
-SlotGame* initGame();
-void playGame(SlotGame* game, const char* korisnik);
-void saveGame(SlotGame* game);
-void deleteGames();
-void printGames();
-void sortGames();
-void searchGameByDobitak();
-void quickSort(SlotGame* games, int low, int high);
-int partition(SlotGame* games, int low, int high);
-SlotGame* binarySearch(SlotGame* games, int low, int high, float target);
-void freeGame(SlotGame* game);
+SlotGame* init_game(void);
+void play_game(SlotGame* game, const char* korisnik);
+int save_game(SlotGame* game);
+int load_games_from_file(void);
+void insert_game(SlotGame* game);
+void print_games(void);
+void delete_game_by_name(void);
+void update_game(void);
+void sort_games(void);
+void search_game_by_dobitak(void);
+void free_game(SlotGame* game);
+void free_all_games(void);
+int copy_file(const char* src, const char* dst);
+
+void trim(char* str);
 
 #endif
